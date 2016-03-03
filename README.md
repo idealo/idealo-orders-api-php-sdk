@@ -12,7 +12,7 @@ This SDK can be used under the conditions of the Apache License 2.0, see LICENSE
 
 The implementation of the idealo SDK is pretty easy and straightforward.
 How it is used can be seen in the "sandbox.php" file located in the same folder as this readme file.
-To test to idealo orders API, put the SDK into a folder on your webserver, open `http://<hostname>/path_to_sdk/sandbox.php` and enter the sandbox token you received from the idealo technical account management (tam@idealo.de)
+To test to idealo orders API, put the SDK into a folder on your webserver, open `http://<hostname>/path_to_sdk/sandbox.php` and enter the sandbox token you received from the idealo technical account management (tam@idealo.de).
 The SDK only consists of the client class right now, which can be found in the namespace idealo\Direktkauf\REST.
 
 ## Basics
