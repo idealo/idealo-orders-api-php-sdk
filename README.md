@@ -74,7 +74,7 @@ They are delivered an an associative array, directly like idealo delivers them i
 
 		[shipping_address] => Array
 			(
-				[address1] => Stra�e 123
+				[address1] => Straße 123
 				[address2] => 
 				[city] => Ort
 				[country] => DE
@@ -85,7 +85,7 @@ They are delivered an an associative array, directly like idealo delivers them i
 
 		[billing_address] => Array
 			(
-				[address1] => Stra�e 123
+				[address1] => Straße 123
 				[address2] => 
 				[city] => Ort
 				[country] => DE
