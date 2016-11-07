@@ -5,7 +5,7 @@
         $sValue = '';
         switch ($sKey) {
             case 'token':
-                $sValue = 'YOUR_SANDBOX_TOKEN';
+                $sValue = '100a56cead4611e4ac36';
                 break;
             case 'mode':
                 $sValue = 'Test';
