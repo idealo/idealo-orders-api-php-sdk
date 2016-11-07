@@ -8,7 +8,7 @@ Technical requirements:
 ----------------------------------------------------------
 
 Introduction:
-The implementation of the idealo SDK is pretty easy and straightforward.
+The initial implementation of the idealo SDK is pretty easy and straightforward.
 How it is used can be seen in the "sandbox.php" file located in the same folder as this readme file.
 The SDK only exists of the Client class right now, which can be found in the namespace idealo\Direktkauf\REST.
 
