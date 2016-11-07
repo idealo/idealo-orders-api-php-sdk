@@ -23,6 +23,18 @@ class Client
 
     protected $sAPILiveUrl = 'https://checkout-api.idealo.com/v1/';
     protected $sAPITestUrl = 'https://checkout-api.sandbox.idealo.com/v1/';
+    
+    /**
+     * You can enter a URL to a test file with order-data here
+     * This will be used to bypass the idealo API for testing purposes
+     * Handle with caution!
+     * Testfile needs to be utf8 encoded
+     * Will not be used if set to false
+     * 
+     * @var string
+     */
+    protected $sDebugDirectUrl = false;
+    
     protected $sToken = null;
     protected $iHttpStatus = null;
     protected $blIsLiveMode = null;
@@ -95,6 +107,10 @@ class Client
     
     protected function getRequestUrl($sType, $sOrderNr = false)
     {
+        if($this->sDebugDirectUrl !== false && $sType != self::URL_TYPE_GET_SUPPORTED_PAYMENT_TYPES) {
+            return $this->sDebugDirectUrl;
+        }
+        
         if($this->getIsLiveMode() === true) {
             $sBaseUrl = $this->sAPILiveUrl;
         } else {
@@ -190,7 +206,7 @@ class Client
     protected function sendCurlRequest($sUrl, $aParams = false, $blIsRetry = false) 
     {
         $this->resetStatusProperties();
-        
+
         $oCurl = curl_init($sUrl);
 
         if($aParams !== false) {
@@ -205,8 +221,7 @@ class Client
         curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
         
         $sResponse = curl_exec($oCurl);
-        
-        
+
         $this->setHttpStatus(curl_getinfo($oCurl, CURLINFO_HTTP_CODE));     
         
         if(curl_error($oCurl) != '') {
@@ -222,13 +237,13 @@ class Client
         
         if ( $this->getHttpStatus() != '200' ) {
             // API is down
-			if ($this->getHttpStatus() == '502'){
-					$this->setCurlError('API down');}
-				else
-					{$this->setCurlError('');}
+			if ($this->getHttpStatus() == '502') {
+                $this->setCurlError('API down');
+            } else {
+                $this->setCurlError('');
+            }
             $sResponse = false;
         }
-        
         return $sResponse;
     }
 
