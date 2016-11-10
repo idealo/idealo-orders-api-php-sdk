@@ -133,7 +133,7 @@ Delivers all currently support payment types in the following format:
 	Array
 	(
 		[CREDITCARD] => Credit Card Payment Method (Heidelpay)
-		[SOFORT] => SOFORT �berweisung Payment Method
+		[SOFORT] => SOFORT Überweisung Payment Method
 		[PAYPAL] => PayPal Payment Method
 	)
 
@@ -188,3 +188,8 @@ In the idealo API documentation, you can find a list with the HTTP status error-
 
 Errors will be logged to the default webserver error log.
 
+### Testing
+
+You can configure a direct link to a test-file filled with json-encoded orders like you would receive them directly from the API.
+You have to enter the link in the "$sDebugDirectUrl" parameter in the idealo/Direktkauf/REST/Client.php file for example like this:
+"http://*YOUR_SERVER_HERE*/order_test_file.txt"
