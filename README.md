@@ -133,7 +133,7 @@ Delivers all currently support payment types in the following format:
 	Array
 	(
 		[CREDITCARD] => Credit Card Payment Method (Heidelpay)
-		[SOFORT] => SOFORT �berweisung Payment Method
+		[SOFORT] => SOFORT Überweisung Payment Method
 		[PAYPAL] => PayPal Payment Method
 	)
 
