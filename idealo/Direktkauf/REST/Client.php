@@ -40,19 +40,32 @@ class Client
     protected $blIsLiveMode = null;
     protected $sCurlError = false;
     protected $iCurlErrno = false;
+
+    protected $sERPShopSystem = null;
+    protected $sERPShopSystemVersion = null;
+    protected $sIntegrationPartner = null;
+    protected $sInterfaceVersion = null;
     
     const URL_TYPE_GET_ORDERS = 'getOrders';
     const URL_TYPE_GET_SUPPORTED_PAYMENT_TYPES = 'getSupportedPaymentTypes';
     const URL_TYPE_SEND_ORDER_NR = 'sendOrderNr';
     const URL_TYPE_SEND_FULFILLMENT = 'sendFulfillmentStatus';
     const URL_TYPE_SEND_REVOCATION = 'sendRevocationStatus';
- 
-    public function __construct($sToken = false, $blLive = false)
-    {
-        if($sToken !== false) {
-            $this->setToken($sToken);
-        }
+
+    public function __construct(
+        $sToken = null,
+        $blLive = false,
+        $sERPShopSystem = null,
+        $sERPShopSystemVersion = null,
+        $sIntegrationPartner = null,
+        $sInterfaceVersion = null
+    ) {
+        $this->setToken($sToken);
         $this->setIsLiveMode($blLive);
+        $this->setERPShopSystem($sERPShopSystem);
+        $this->setERPShopSystemVersion($sERPShopSystemVersion);
+        $this->setIntegrationPartner($sIntegrationPartner);
+        $this->setInterfaceVersion($sInterfaceVersion);
     }
     
     public function setToken($sToken) 
@@ -95,16 +108,56 @@ class Client
         return $this->sCurlError;
     }
     
-    protected function setCurlErrno($sCurlErrno)
+    protected function setCurlErrno($iCurlErrno)
     {
-        $this->sCurlErrno = $sCurlErrno;
+        $this->iCurlErrno = $iCurlErrno;
     }
     
     public function getCurlErrno() 
     {
-        return $this->sCurlErrno;
+        return $this->iCurlErrno;
     }
-    
+
+    public function setERPShopSystem($sERPShopSystem)
+    {
+        $this->sERPShopSystem = $sERPShopSystem;
+    }
+
+    public function getERPShopSystem()
+    {
+        return $this->sERPShopSystem;
+    }
+
+    public function setERPShopSystemVersion($sERPShopSystemVersion)
+    {
+        $this->sERPShopSystemVersion = $sERPShopSystemVersion;
+    }
+
+    public function getERPShopSystemVersion()
+    {
+        return $this->sERPShopSystemVersion;
+    }
+
+    public function setIntegrationPartner($sIntegrationPartner)
+    {
+        $this->sIntegrationPartner = $sIntegrationPartner;
+    }
+
+    public function getIntegrationPartner()
+    {
+        return $this->sIntegrationPartner;
+    }
+
+    public function setInterfaceVersion($sInterfaceVersion)
+    {
+        $this->sInterfaceVersion = $sInterfaceVersion;
+    }
+
+    public function getInterfaceVersion()
+    {
+        return $this->sInterfaceVersion;
+    }
+
     protected function getRequestUrl($sType, $sOrderNr = false)
     {
         if($this->sDebugDirectUrl !== false && $sType != self::URL_TYPE_GET_SUPPORTED_PAYMENT_TYPES) {
@@ -182,7 +235,25 @@ class Client
         }
         return $this->sendCurlRequest($sUrl, $aParams);
     }
-    
+
+    protected function getReportingHeaders()
+    {
+        $aHeaders = array();
+        if ($this->getERPShopSystem()) {
+            $aHeaders[] = 'ERP-Shop-System:'.$this->getERPShopSystem();
+        }
+        if ($this->getERPShopSystemVersion()) {
+            $aHeaders[] = 'ERP-Shop-System-Version:'.$this->getERPShopSystemVersion();
+        }
+        if ($this->getIntegrationPartner()) {
+            $aHeaders[] = 'Integration-Partner:'.$this->getIntegrationPartner();
+        }
+        if ($this->getInterfaceVersion()) {
+            $aHeaders[] = 'Interface-Version:'.$this->getInterfaceVersion();
+        }
+        return $aHeaders;
+    }
+
     protected function getJsonArrayFromRequest($sUrl)
     {
         $aArray = array();
@@ -209,12 +280,16 @@ class Client
 
         $oCurl = curl_init($sUrl);
 
+        $aHttpHeaders = $this->getReportingHeaders();
         if($aParams !== false) {
             curl_setopt($oCurl, CURLOPT_CUSTOMREQUEST, "PUT");
-            curl_setopt($oCurl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            $aHttpHeaders[] = 'Content-Type: application/json';
             curl_setopt($oCurl, CURLOPT_POSTFIELDS, json_encode($aParams));
         } else {
             curl_setopt($oCurl, CURLOPT_CUSTOMREQUEST, "GET");
+        }
+        if (!empty($aHttpHeaders)) {
+            curl_setopt($oCurl, CURLOPT_HTTPHEADER, $aHttpHeaders);
         }
         curl_setopt($oCurl, CURLOPT_TIMEOUT, 60); //timeout in seconds
         curl_setopt($oCurl, CURLOPT_HEADER, false);
