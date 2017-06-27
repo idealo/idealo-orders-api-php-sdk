@@ -30,6 +30,12 @@
         $sToken = getPostValue('token', false);
         $blIsLive = getPostValue('mode', false) == 'Live' ? true : false;
         $oClient = new idealo\Direktkauf\REST\Client($sToken, $blIsLive);
+		
+	    $oClient->setERPShopSystem('SDK GUI');
+		$oClient->setERPShopSystemVersion('1.0.8');
+		$oClient->setIntegrationPartner('idealo');
+		$oClient->setInterfaceVersion('1.0.8');
+		
         return $oClient;
     }
     
