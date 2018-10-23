@@ -312,8 +312,10 @@ class Client
         
         if ( $this->getHttpStatus() != '200' ) {
             // API is down
-			if ($this->getHttpStatus() == '502') {
+            if ($this->getHttpStatus() == '502') {
                 $this->setCurlError('API down');
+            } elseif ($this->getHttpStatus() == '401') {
+                $this->setCurlError('Unauthorized');
             } else {
                 $this->setCurlError('');
             }
