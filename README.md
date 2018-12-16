@@ -51,7 +51,7 @@ At the moment there the following 5 requests available:
 ### `$oClient->getOrders()`
 
 Requests all open orders from idealo.
-They are delivered an an associative array, directly like idealo delivers them in the following format:
+They are delivered as an associative array, directly like idealo delivers them in the following format:
 
 
 	Array
